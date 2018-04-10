@@ -4,8 +4,14 @@ module Lib where
 
 import Network.Wreq
 import Control.Lens
+import Data.ByteString.Lazy.Lens
+
+writeGitIgnoreFile url = do
+                    r <- get url
+                    writeFile "gitignore" (r ^. responseBody. unpackedChars)
+
 
 showMsg :: IO ()
 showMsg = do
-            r <- get "https://raw.githubusercontent.com/github/gitignore/master/Haskell.gitignore"
-            print $ r ^. responseBody
+            writeGitIgnoreFile "https://raw.githubusercontent.com/github/gitignore/master/Haskell.gitignore"
+            putStrLn "File \"gitignore\" created"
