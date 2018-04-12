@@ -20,6 +20,7 @@ library
                      , aeson
                      , wreq
                      , lens
+                     , http-client
   default-language:    Haskell2010
 
 executable getgitignore

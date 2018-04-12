@@ -1,17 +1,27 @@
-{-# LANGUAGE OverloadedStrings #-}
-
+{-#LANGUAGE OverloadedStrings #-}
 module Lib where
 
-import Network.Wreq
 import Control.Lens
-import Data.ByteString.Lazy.Lens
+import Network.Wreq
+import Data.ByteString.Lazy.Lens (unpackedChars)
 
-writeGitIgnoreFile url = do
-                    r <- get url
-                    writeFile "gitignore" (r ^. responseBody. unpackedChars)
+repoContentURL = "https://api.github.com/repos/github/gitignore/contents"
+
+gitIgnoreSample = "https://raw.githubusercontent.com/github/gitignore/master/Haskell.gitignore"
 
 
-showMsg :: IO ()
-showMsg = do
-            writeGitIgnoreFile "https://raw.githubusercontent.com/github/gitignore/master/Haskell.gitignore"
-            putStrLn "File \"gitignore\" created"
+writeGitIgnoreFile :: String -> IO ()
+writeGitIgnoreFile url = do 
+                 r <- get url
+                 writeFile "gitignore" (r ^. responseBody. unpackedChars)
+                 putStrLn "File \"gitignore\" created"
+
+
+--------------------------------------------------------------------------------
+
+getListOfTemplates :: IO ()
+getListOfTemplates = putStrLn "TODO: get list of templates"
+
+getGitIgnore :: String -> IO ()
+getGitIgnore name = putStrLn ("TODO: write .gitignore template file for \"" ++ 
+                              name ++ "\" from github")
