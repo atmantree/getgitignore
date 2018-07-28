@@ -1,29 +1,56 @@
 module Main where
 
 import System.Environment
+import Network.Wreq
+import Control.Lens
+import System.IO (writeFile)
+import Data.ByteString.Lazy.Char8 (unpack)
 
 
--- repoContentURL = "https://api.github.com/repos/github/gitignore/contents"
--- gitIgnoreSample = "https://raw.githubusercontent.com/github/gitignore/master/Haskell.gitignore"
+gitignoreSample :: String
+gitignoreSample = "https://raw.githubusercontent.com/github/gitignore/master/Haskell.gitignore"
 
 
-getListOfTemplates :: IO ()
-getListOfTemplates = putStrLn "TODO: get list of templates"
+githubContentURL :: String
+githubContentURL = "https://api.github.com/repos/github/gitignore/contents"
 
 
-getGitIgnore :: String -> IO ()
-getGitIgnore name = putStrLn ("TODO: write .gitignore template file for \"" 
-                              ++ name ++ "\" from github")
+usageMessage :: String
+usageMessage = "Usage: ggi [list|<template name>]"
+
+
+writeGitignoreFile :: String -> IO ()
+writeGitignoreFile url = do
+  r <- get url
+  writeFile "./sample.gitignore" (unpack $ r ^. responseBody)
+
+
+getTemplateFor :: String -> IO()
+getTemplateFor name = do
+  writeGitignoreFile gitignoreSample
+  putStrLn "Writing file \"sample.gitignore\" downloaded from the github templates repo"
+  putStrLn ("TODO: download template for \"" ++ name ++ "\"")
+
+
+processAction :: String -> IO ()
+processAction action = do
+  r <- get githubContentURL
+  putStr "Getting JSON content, length: "
+  print $ length $ unpack (r ^. responseBody)
+  putStrLn "-------------------------------"
+  if action == "list" then
+     putStrLn "TODO: get templates list"
+  else
+    getTemplateFor action
+
+
+takeArgs :: [String] -> IO()
+takeArgs []       = putStrLn usageMessage
+takeArgs [action] = processAction action
+takeArgs (x:xs)   = putStrLn usageMessage 
 
 
 main :: IO ()
 main = do
   args <- getArgs
-  if length args /= 1 then
-    putStrLn "Usage: ggi [list|<template_name>]"
-  else
-    if head args == "list" then
-      getListOfTemplates
-    else
-      getGitIgnore $ head args
-
+  takeArgs args
