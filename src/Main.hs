@@ -1,8 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import System.Environment
 import Network.Wreq
 import Control.Lens
+import Data.Map as Map
+import Data.Aeson (decode, Value)
 import System.IO (writeFile)
 import Data.ByteString.Lazy.Char8 (unpack)
 
@@ -32,11 +35,16 @@ getTemplateFor name = do
   putStrLn ("TODO: download template for \"" ++ name ++ "\"")
 
 
+getValue :: Maybe Int-> Int
+getValue (Just a)  = a
+getValue Nothing   = -1
+
+
 processAction :: String -> IO ()
 processAction action = do
   r <- get githubContentURL
   putStr "Getting JSON content, length: "
-  print $ length $ unpack (r ^. responseBody)
+  print $ getValue $ length <$> (decode (r ^. responseBody) :: Maybe [Map String Value])
   putStrLn "-------------------------------"
   if action == "list" then
      putStrLn "TODO: get templates list"
