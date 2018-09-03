@@ -34,10 +34,15 @@ getTemplateFor name = do
   putStrLn "Writing file \"sample.gitignore\" downloaded from the github templates repo"
   putStrLn ("TODO: download template for \"" ++ name ++ "\"")
 
+updateData :: IO ()
+updateData = do
+  r <- get githubContentURL
+  let content = r ^. responseBody
+  print content
 
 processAction :: String -> IO ()
 processAction "list"   = putStrLn "TODO: get templates list"
-processAction "update" = putStrLn "TODO: get todos from internet"
+processAction "update" = updateData
 processAction "-h"     = putStrLn usageMessage
 processAction "--help" = putStrLn usageMessage
 processAction action   = getTemplateFor action
