@@ -19,7 +19,7 @@ githubContentURL = "https://api.github.com/repos/github/gitignore/contents"
 
 
 usageMessage :: String
-usageMessage = "Usage: ggi [list|<template name>]"
+usageMessage = "Usage: ggi [update|list|<template name>]"
 
 
 writeGitignoreFile :: String -> IO ()
@@ -35,21 +35,12 @@ getTemplateFor name = do
   putStrLn ("TODO: download template for \"" ++ name ++ "\"")
 
 
-getValue :: Maybe Int-> Int
-getValue (Just a)  = a
-getValue Nothing   = -1
-
-
 processAction :: String -> IO ()
-processAction action = do
-  r <- get githubContentURL
-  putStr "Getting JSON content, length: "
-  print $ getValue $ length <$> (decode (r ^. responseBody) :: Maybe [Map String Value])
-  putStrLn "-------------------------------"
-  if action == "list" then
-     putStrLn "TODO: get templates list"
-  else
-    getTemplateFor action
+processAction "list"   = putStrLn "TODO: get templates list"
+processAction "update" = putStrLn "TODO: get todos from internet"
+processAction "-h"     = putStrLn usageMessage
+processAction "--help" = putStrLn usageMessage
+processAction action   = getTemplateFor action
 
 
 takeArgs :: [String] -> IO()
