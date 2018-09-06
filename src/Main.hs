@@ -19,7 +19,7 @@ githubContentURL = "https://api.github.com/repos/github/gitignore/contents"
 
 
 usageMessage :: String
-usageMessage = "Usage: ggi [update|list|<template name>]"
+usageMessage = "Usage: ggi [update|templates|<template name>]"
 
 
 writeGitignoreFile :: String -> IO ()
@@ -41,11 +41,11 @@ updateData = do
   print content
 
 processAction :: String -> IO ()
-processAction "list"   = putStrLn "TODO: get templates list"
-processAction "update" = updateData
-processAction "-h"     = putStrLn usageMessage
-processAction "--help" = putStrLn usageMessage
-processAction action   = getTemplateFor action
+processAction "-h"        = putStrLn usageMessage
+processAction "--help"    = putStrLn usageMessage
+processAction "templates" = putStrLn "TODO: get templates list"
+processAction "update"    = updateData
+processAction template    = getTemplateFor template
 
 
 takeArgs :: [String] -> IO()
