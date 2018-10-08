@@ -1,6 +1,5 @@
-# Get .gitignore
+# Get .gitignore #
 
-`ggi` is a program that pulls from github the `.gitignore` file template for
-your repo.
-
+This program gets from [github](https://github.com/github/gitignore) a set of
+templates for the `.gitignore` files you can use for your repos.
 
